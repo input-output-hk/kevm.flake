@@ -18,14 +18,19 @@
 
   outputs = inputs@{ self, kevm, nixpkgs, ... }:
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      kframework = import inputs.kframework { system = "x86_64-linux"; release = true; };
+      system = "x86_64-linux";
+      overlay = final: prev: {
+        inherit (import kevm { inherit inputs; inherit (final) kframework pkgs; }) kevm;
+        kframework = import inputs.kframework { inherit (prev) system; release = true; };
+      };
+      pkgs = import nixpkgs { inherit system; overlays = [ overlay ]; };
     in
     {
+      inherit overlay;
 
-      packages.x86_64-linux.kevm = (import kevm { inherit inputs pkgs kframework; }).kevm;
+      packages.${system}.kevm = pkgs.kevm;
 
-      defaultPackage.x86_64-linux = self.packages.x86_64-linux.kevm;
+      defaultPackage.${system} = self.packages.${system}.kevm;
 
     };
 }
