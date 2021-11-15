@@ -117,19 +117,19 @@
     "haskell-backend": {
       "flake": false,
       "locked": {
-        "lastModified": 1629149595,
-        "narHash": "sha256-r1T9LNHtVVrckEmbRQUFpZ8QOv6IHxMNnh0JbsJ1PNs=",
-        "rev": "65e36305b91eab085a2f1a1a56187dedc3a8b1e8",
-        "revCount": 3742,
+        "lastModified": 1637013816,
+        "narHash": "sha256-rFQe/FBBdIeArnycnZAXjFOWnXXuOA7cdQ0MBPL2yJQ=",
+        "ref": "master",
+        "rev": "96e9bb8ee1f731963fa9966614e8d09e2f6afc06",
+        "revCount": 3744,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kreisys/kore"
+        "url": "https://github.com/nrdxp/kore"
       },
       "original": {
-        "rev": "65e36305b91eab085a2f1a1a56187dedc3a8b1e8",
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kreisys/kore"
+        "url": "https://github.com/nrdxp/kore"
       }
     },
     "haskell.nix": {
@@ -230,19 +230,19 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1629296366,
-        "narHash": "sha256-YdB2jwujAY9Jqf8GZz162d/yQ62+OZ24wbufhYbmaYo=",
+        "lastModified": 1637013864,
+        "narHash": "sha256-TjrNKXzALrFjGCCbvpQKmMnkSskklGqpA8xs2/V3xKQ=",
         "ref": "master",
-        "rev": "eaa387ea59dae0446057a96fa781cc67b564390f",
-        "revCount": 16427,
+        "rev": "548dd10044e11955ca0ca0fbe528d428e970f525",
+        "revCount": 16429,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kreisys/k"
+        "url": "https://github.com/nrdxp/k"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kreisys/k"
+        "url": "https://github.com/nrdxp/k"
       }
     },
     "llvm-backend": {

@@ -6,7 +6,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
     mavenix.url = "github:nix-community/mavenix";
     mavenix.flake = false;
-    kframework.url = "https://github.com/kreisys/k";
+    kframework.url = "https://github.com/nrdxp/k";
     kframework.type = "git";
     kframework.submodules = true;
     kevm.url = "https://github.com/nrdxp/evm-semantics";
