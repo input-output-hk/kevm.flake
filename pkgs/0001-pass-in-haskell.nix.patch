@@ -1,0 +1,93 @@
+From 61558eac171ada511bbbf7678739bc170705a46f Mon Sep 17 00:00:00 2001
+From: Timothy DeHerrera <tim.deherrera@iohk.io>
+Date: Mon, 6 Dec 2021 15:33:04 -0700
+Subject: [PATCH] pass in haskell.nix
+
+---
+ default.nix                | 40 ++++----------------------------------
+ nix/kore.nix.d/default.nix |  2 ++
+ 2 files changed, 6 insertions(+), 36 deletions(-)
+
+diff --git a/default.nix b/default.nix
+index 90337e710..e80efa803 100644
+--- a/default.nix
++++ b/default.nix
+@@ -1,50 +1,19 @@
+ { profiling ? false
+-, release ? false
++, release ? true
+ , threaded ? !profiling
+ , checkMaterialization ? false
++, pkgs
+ 
+-# Override `src` when this project is imported as a Git submodule:
+-#
+-# > ttuegel.cleanGitSubtree {
+-# >   name = "kore";
+-# >   src = ./parent/repo;
+-# >   subDir = "path/to/submodule";
+-# > };
+-#
+-# Use `cleanGitSubtree` whenever possible to preserve the same source code
+-# layout as the kframework/kore repository (to enable cache re-use).
+-#
+-, src ? null
++, src
+ }:
+ 
+ let
+-  sources = import ./nix/sources.nix;
+-  haskell-nix = import sources."haskell.nix" {};
+-  inherit (haskell-nix) pkgs;
+   inherit (pkgs) lib;
+-
+-  ttuegel =
+-    let
+-      src = builtins.fetchGit {
+-        url = "https://github.com/ttuegel/nix-lib";
+-        rev = "66bb0ab890ff4d828a2dcfc7d5968465d0c7084f";
+-        ref = "main";
+-      };
+-    in import src { inherit pkgs; };
+ in
+ 
+ let
+   project = pkgs.haskell-nix.stackProject {
+-    src = ttuegel.cleanSourceWith {
+-      name = "kore";
+-      src = ttuegel.orElse src (ttuegel.cleanGitSubtree { src = ./.; });
+-      ignore = [
+-        "/*"
+-        "!/stack.yaml"
+-        "!/kore"
+-      ];
+-    };
+-    inherit checkMaterialization;
++    inherit checkMaterialization src;
+     materialized = ./nix/kore.nix.d;
+     modules = [
+       {
+@@ -72,7 +41,6 @@ let
+   shell = import ./shell.nix { inherit default checkMaterialization; };
+ 
+   version = project.kore.components.exes.kore-exec.version;
+-  # version = "0.43.0.0";
+ 
+   prelude-kore = ./src/main/kore/prelude.kore;
+ 
+diff --git a/nix/kore.nix.d/default.nix b/nix/kore.nix.d/default.nix
+index 23d0c03c3..27fdf0e06 100644
+--- a/nix/kore.nix.d/default.nix
++++ b/nix/kore.nix.d/default.nix
+@@ -23,5 +23,7 @@
+     ({ lib, ... }:
+       { packages = {}; })
+     { packages = { "$everything" = { ghcOptions = [ "-haddock" ]; }; }; }
++    ({ lib, ... }:
++      { planned = lib.mkOverride 900 true; })
+     ];
+   }
+\ No newline at end of file
+-- 
+2.33.1
+

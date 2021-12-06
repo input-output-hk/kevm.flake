@@ -2,35 +2,43 @@
   description = "kevm package";
 
   inputs = {
-    "haskell.nix".url = "github:input-output-hk/haskell.nix";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-21.05";
-    mavenix.url = "github:nix-community/mavenix";
-    mavenix.flake = false;
-    kframework.url = "https://github.com/nrdxp/k";
-    kframework.type = "git";
-    kframework.submodules = true;
-    kevm.url = "https://github.com/nrdxp/evm-semantics";
+    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
+    haskellNix.url = "github:input-output-hk/haskell.nix";
+
+    kevm.url = "github:kframework/evm-semantics/v1.0.1-63dda59";
     kevm.flake = false;
-    kevm.type = "git";
-    kevm.ref = "nix-package";
-    kevm.submodules = true;
+
+    k.url = "https://github.com/kframework/k?ref=v5.2.13";
+    k.type = "git";
+    k.flake = false;
+    k.submodules = true;
+
+    mavenix.url = "github:jonringer/mavenix/add-flakes";
+    mavenix.flake = false;
+
+    blockchain-plugin.url = "https://github.com/runtimeverification/blockchain-k-plugin?rev=cc7384e565e4c8df4d17a3330cd9951d32d4830f";
+    blockchain-plugin.type = "git";
+    blockchain-plugin.flake = false;
+    blockchain-plugin.submodules = true;
   };
 
-  outputs = inputs@{ self, kevm, nixpkgs, ... }:
+  outputs = inputs@{ self, nixpkgs, haskellNix, ... }:
     let
+      pkgs = import nixpkgs { inherit system; overlays = [ overlay haskellNix.overlay ]; };
+
       system = "x86_64-linux";
-      overlay = final: prev: {
-        inherit (import kevm { inherit inputs; inherit (final) kframework pkgs; }) kevm;
-        kframework = import inputs.kframework { inherit (prev) system; release = true; };
-      };
-      pkgs = import nixpkgs { inherit system; overlays = [ overlay ]; };
+
+      name = "KEVM";
+
+      overlay = import ./overlay.nix name inputs;
     in
     {
       inherit overlay;
 
-      packages.${system}.kevm = pkgs.kevm;
+      packages.${system} = self.overlay pkgs nixpkgs.legacyPackages.${system};
 
-      defaultPackage.${system} = self.packages.${system}.kevm;
+      legacyPackages.${system} = pkgs;
 
+      defaultPackage.${system} = self.packages.${system}.${name};
     };
 }
