@@ -1,4 +1,5 @@
-{ cryptopp
+{ cmake
+, cryptopp
 , jemalloc
 , k
 , kore
@@ -8,8 +9,10 @@
 , libyamlcpp
 , llvm-backend
 , mpfr
+, ncurses
 , openjdk
 , openssl
+, pkgconfig
 , procps
 , protobuf
 , python
@@ -22,30 +25,43 @@
 
 let
   version = "0";
+  inherit (llvm-backend.passthru) clang lld;
+
+  mkEVM = target: f: stdenv.mkDerivation (f {
+    pname = "evm-${target}";
+    inherit version src;
+    nativeBuildInputs = [ protobuf k llvm-backend clang cmake which openssl pkgconfig procps kore lld ];
+    buildInputs = [ cryptopp libff mpfr secp256k1 ];
+    patches = [ ./make.patch ];
+
+    postPatch = ''
+      patchShebangs ./kevm
+    '';
+    dontConfigure = true;
+    makeFlags =
+      [
+        "INSTALL_PREFIX=${builtins.placeholder "out"}"
+        "SKIP_LLVM=true"
+        "SKIP_HASKELL=true"
+        "SYSTEM_LIBFF=true"
+        "SYSTEM_LIBSECP256K1=true"
+        "SYSTEM_LIBCRYPTOPP=true"
+      ];
+    buildFlags = [ "build-${target}" ];
+    installPhase = ''
+      mkdir -p $out/bin
+      cp .build/${builtins.placeholder "out"}/lib/kevm/node/build/kevm-${target} $out/bin/
+    '';
+  });
+
+  kevm-vm = mkEVM "vm" (x: x);
 
   host-PATH = lib.makeBinPath [ k llvm-backend kore ];
 in
 stdenv.mkDerivation {
   pname = "kevm";
   inherit version src;
-
-  nativeBuildInputs = [
-    llvm-backend.passthru.clang
-    k
-    kore
-    libyamlcpp
-    llvm-backend
-    mpfr
-    openjdk
-    openssl
-    procps
-    protobuf
-    python
-    which
-    z3
-  ] ++ llvm-backend.nativeBuildInputs;
-
-  dontUseCmakeConfigure = true;
+  patches = [ ./make.patch ];
 
   postPatch = ''
     sed -i kevm \
@@ -56,7 +72,7 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
-    # "INSTALL_PREFIX=${builtins.placeholder "out"}"
+    "INSTALL_PREFIX=${builtins.placeholder "out"}"
     "SKIP_LLVM=true"
     "SKIP_HASKELL=true"
     "SYSTEM_LIBFF=true"
@@ -64,11 +80,14 @@ stdenv.mkDerivation {
     "SYSTEM_LIBCRYPTOPP=true"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-unused-command-line-argument" ];
+  # NIX_CFLAGS_COMPILE = [ "-Wno-unused-command-line-argument" ];
 
   preBuild = ''
-    make plugin-deps
+    make plugin-deps "INSTALL_PREFIX=${builtins.placeholder "out"}"
   '';
 
-  buildFlags = [ "build" ];
+  postInstall = "ln -s ${kevm-vm}/bin/kevm-vm $out/bin/";
+  buildFlags = [ "build-kevm" ];
+
+  passthru = { inherit kevm-vm; };
 }

@@ -1,20 +1,27 @@
-name: inputs: final: prev: {
-  inherit (let
-    src = prev.stdenvNoCC.mkDerivation {
-      name = "kore-src";
+name: inputs: final: prev:
+let
+  mavenix = import inputs.mavenix { pkgs = prev; };
+
+  koreProject =
+    let
       src = "${inputs.k}/haskell-backend/src/main/native/haskell-backend";
-      patches = [ "${inputs.self}/pkgs/0001-pass-in-haskell.nix.patch" ];
-      dontBuild = true;
-      dontCheck = true;
-      installPhase = ''
-        cp -r . $out
-      '';
-    };
-  in
-  import src {
-    inherit src;
-    pkgs = final;
-  }) kore prelude-kore;
+      srcNix = (prev.stdenvNoCC.mkDerivation {
+        inherit src;
+
+        name = "kore-src";
+        patches = [ "${inputs.self}/pkgs/0001-pass-in-haskell.nix.patch" ];
+        dontBuild = true;
+        dontCheck = true;
+        installPhase = ''
+          cp -r . $out
+        '';
+      });
+    in
+    import srcNix { inherit src; pkgs = final; };
+
+in
+{
+  inherit (koreProject) kore prelude-kore;
 
   llvm-backend = final.callPackage "${inputs.self}/pkgs/llvm-backend.nix" {
     src = "${inputs.k}/llvm-backend/src/main/native/llvm-backend";
@@ -22,8 +29,10 @@ name: inputs: final: prev: {
 
   k = final.callPackage "${inputs.self}/pkgs/k" {
     src = inputs.k;
-    mavenix = import inputs.mavenix { pkgs = prev; };
+    inherit mavenix;
   };
+
+  mavenix = mavenix.cli;
 
   ${name} = final.callPackage "${inputs.self}/pkgs/kevm.nix" {
     src = prev.stdenvNoCC.mkDerivation {

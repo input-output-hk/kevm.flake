@@ -8,14 +8,17 @@
     kevm.url = "github:kframework/evm-semantics/v1.0.1-63dda59";
     kevm.flake = false;
 
-    k.url = "https://github.com/kframework/k?ref=v5.2.13";
-    k.type = "git";
-    k.flake = false;
-    k.submodules = true;
+    k = {
+      flake = false;
+      submodules = true;
+      type = "git";
+      url = "https://github.com/kframework/k?ref=v5.2.13";
+    };
 
-    mavenix.url = "github:jonringer/mavenix/add-flakes";
+    mavenix.url = "github:nix-community/mavenix";
     mavenix.flake = false;
 
+    # use rev set in `kevm`'s '.gitmodule' file (update on change)
     blockchain-plugin.url = "https://github.com/runtimeverification/blockchain-k-plugin?rev=cc7384e565e4c8df4d17a3330cd9951d32d4830f";
     blockchain-plugin.type = "git";
     blockchain-plugin.flake = false;

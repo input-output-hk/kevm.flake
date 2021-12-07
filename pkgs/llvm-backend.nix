@@ -3,7 +3,7 @@
 , cmake
 , flex
 , pkgconfig
-, llvmPackages_11
+, llvmPackages_12
 , boost
 , gmp
 , jemalloc
@@ -18,11 +18,12 @@
 
 
 let
-  llvmPackages = llvmPackages_11.override {
+  llvmPackages = llvmPackages_12.override {
     bootBintoolsNoLibc = null;
     bootBintools = null;
   };
-  inherit (llvmPackages) stdenv llvm;
+
+  inherit (llvmPackages_12) stdenv llvm lld;
 
   clang = llvmPackages.clangNoLibcxx.override (attrs: {
     extraBuildCommands = ''
@@ -38,7 +39,7 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = [ cmake flex llvm pkgconfig ];
+  nativeBuildInputs = [ cmake flex llvm pkgconfig lld ];
   buildInputs = [ boost libyaml ];
   propagatedBuildInputs =
     [ gmp jemalloc libffi mpfr ncurses ]
@@ -70,6 +71,6 @@ stdenv.mkDerivation {
   doCheck = false;
 
   passthru = {
-    inherit clang;
+    inherit clang lld;
   };
 }
