@@ -14,10 +14,10 @@
 , src
 , stdenv
 , which
+, version
 }:
 
 let
-  version = "1.0.1-63dda59";
   inherit (llvm-backend.passthru) clang lld;
 
   host-PATH = lib.makeBinPath [ k llvm-backend kore ];
@@ -40,6 +40,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "INSTALL_PREFIX=${builtins.placeholder "out"}"
+    "KEVM_RELEASE_TAG=v${version}"
     "SKIP_LLVM=true"
     "SKIP_HASKELL=true"
     "SYSTEM_LIBFF=true"

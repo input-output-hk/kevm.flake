@@ -40,6 +40,7 @@ in
   mavenix = mavenix.cli;
 
   ${name} = final.callPackage "${inputs.self}/pkgs/kevm.nix" {
+    version = "1.0.1-${inputs.kevm.shortRev}";
     src = prev.stdenvNoCC.mkDerivation {
       name = "${name}-src";
       src = inputs.kevm;
