@@ -32,12 +32,18 @@ in
     inherit mavenix;
   };
 
+  libff = final.callPackage "${inputs.self}/pkgs/libff.nix" {
+    inherit (final.llvmPackages_12) stdenv;
+    src = "${inputs.blockchain-plugin}/deps/libff";
+  };
+
   mavenix = mavenix.cli;
 
   ${name} = final.callPackage "${inputs.self}/pkgs/kevm.nix" {
     src = prev.stdenvNoCC.mkDerivation {
       name = "${name}-src";
       src = inputs.kevm;
+      patches = [ pkgs/make.patch ];
       dontBuild = true;
       dontCheck = true;
       installPhase = ''
