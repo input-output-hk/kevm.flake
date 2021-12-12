@@ -26,12 +26,12 @@
         "revCount": 119,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/runtimeverification/blockchain-k-plugin?rev=cc7384e565e4c8df4d17a3330cd9951d32d4830f"
+        "url": "https://github.com/runtimeverification/blockchain-k-plugin?rev=640c5919710b64a643563523db2e2a36a656ce06"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/runtimeverification/blockchain-k-plugin?rev=cc7384e565e4c8df4d17a3330cd9951d32d4830f"
+        "url": "https://github.com/runtimeverification/blockchain-k-plugin?rev=640c5919710b64a643563523db2e2a36a656ce06"
       }
     },
     "cabal-32": {
@@ -187,34 +187,34 @@
     "k": {
       "flake": false,
       "locked": {
-        "lastModified": 1638893443,
-        "narHash": "sha256-eHOUjGcZiDqmOmGqDTkLa45X9zhmDUPi8hrgXQUTrJw=",
+        "lastModified": 1639179600,
+        "narHash": "sha256-uwW2IS82YpY+wdpcYlfa0fvGiufAyhJiApfQhrnfUgw=",
         "ref": "master",
-        "rev": "04cec62ccac5ea8342d0baca26b634d431b9e228",
-        "revCount": 16581,
+        "rev": "e6750bce6745e3f49cb3b9e5bb49c30001ebda08",
+        "revCount": 16588,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kframework/k?ref=v5.2.13"
+        "url": "https://github.com/kframework/k?ref=v5.2.43"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kframework/k?ref=v5.2.13"
+        "url": "https://github.com/kframework/k?ref=v5.2.43"
       }
     },
     "kevm": {
       "flake": false,
       "locked": {
-        "lastModified": 1635365467,
-        "narHash": "sha256-Xo0xdq1qR2Am+ECEDzLrFNmzHv3uC/Vx45L1TdFNfqE=",
+        "lastModified": 1639188682,
+        "narHash": "sha256-0Th/mzec3MVh+fhRiW5O2czHOet6eeUgPFXjfwA6FEQ=",
         "owner": "kframework",
         "repo": "evm-semantics",
-        "rev": "63dda59c3f957b2be0b298f62784e499458217a2",
+        "rev": "fc35db2c4334c2217b0ae9b0b520a58faee8b751",
         "type": "github"
       },
       "original": {
         "owner": "kframework",
-        "ref": "v1.0.1-63dda59",
+        "ref": "v1.0.1-fc35db2",
         "repo": "evm-semantics",
         "type": "github"
       }

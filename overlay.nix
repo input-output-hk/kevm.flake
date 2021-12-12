@@ -44,7 +44,7 @@ in
     src = prev.stdenvNoCC.mkDerivation {
       name = "${name}-src";
       src = inputs.kevm;
-      patches = [ pkgs/make.patch ];
+      patches = [ pkgs/0001-fix-cmake-and-makefile-for-nix.patch ];
       dontBuild = true;
       dontCheck = true;
       installPhase = ''
