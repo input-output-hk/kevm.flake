@@ -31,9 +31,9 @@
 
       system = "x86_64-linux";
 
-      name = "KEVM";
+      pname = "KEVM";
 
-      overlay = import ./overlay.nix name inputs;
+      overlay = import ./overlay.nix pname inputs;
     in
     {
       inherit overlay;
@@ -42,6 +42,6 @@
 
       legacyPackages.${system} = pkgs;
 
-      defaultPackage.${system} = self.packages.${system}.${name};
+      defaultPackage.${system} = self.packages.${system}.${pname};
     };
 }

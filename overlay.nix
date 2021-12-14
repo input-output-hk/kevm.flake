@@ -1,4 +1,4 @@
-name: inputs: final: prev:
+pname: inputs: final: prev:
 let
   mavenix = import inputs.mavenix { pkgs = prev; };
 
@@ -39,24 +39,9 @@ in
 
   mavenix = mavenix.cli;
 
-  ${name} = final.callPackage "${inputs.self}/pkgs/kevm.nix" {
+  ${pname} = final.callPackage "${inputs.self}/pkgs/kevm.nix" {
+    inherit pname inputs;
     version = "1.0.1-${inputs.kevm.shortRev}";
-    src = prev.stdenvNoCC.mkDerivation {
-      name = "${name}-src";
-      src = inputs.kevm;
-      patches = [ pkgs/0001-fix-cmake-and-makefile-for-nix.patch ];
-      dontBuild = true;
-      dontCheck = true;
-      installPhase = ''
-        cp -r . $out
-        cd $out
-
-        rm -rf deps/{k, plugin}
-
-        cp -r ${inputs.k}/ -T deps/k
-        cp -r ${inputs.blockchain-plugin}/ -T deps/plugin
-      '';
-    };
+    patches = [ pkgs/0001-fix-cmake-and-makefile-for-nix.patch ];
   };
-
 }

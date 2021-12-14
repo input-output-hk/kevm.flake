@@ -11,9 +11,11 @@
 , procps
 , protobuf
 , secp256k1
-, src
+, patches
 , stdenv
 , which
+, inputs
+, pname
 , version
 }:
 
@@ -23,13 +25,23 @@ let
   host-PATH = lib.makeBinPath [ k llvm-backend kore ];
 in
 stdenv.mkDerivation {
-  pname = "kevm";
-  inherit version src;
+  src = inputs.kevm;
+  inherit pname version patches;
 
   nativeBuildInputs = [ protobuf k llvm-backend clang cmake which openssl pkgconfig procps kore lld ];
   buildInputs = [ cryptopp libff mpfr secp256k1 ];
 
   dontConfigure = true;
+
+  prePatch = ''
+    rm -rf deps/{k, plugin}
+
+    cp -r ${inputs.k}/ -T deps/k
+    cp -r ${inputs.blockchain-plugin}/ -T deps/plugin
+
+    chmod -R a=r-wx,u=wr,a+X deps
+  '';
+
   postPatch = ''
     sed -i kevm \
       -e "/^export LD_LIBRARY_PATH=/ d" \
