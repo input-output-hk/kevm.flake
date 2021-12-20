@@ -23,14 +23,12 @@
     blockchain-plugin.type = "git";
     blockchain-plugin.flake = false;
     blockchain-plugin.submodules = true;
+
+    utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = inputs@{ self, nixpkgs, haskellNix, ... }:
+  outputs = inputs@{ self, nixpkgs, haskellNix, utils, ... }:
     let
-      pkgs = import nixpkgs { inherit system; overlays = [ overlay haskellNix.overlay ]; };
-
-      system = "x86_64-linux";
-
       pname = "KEVM";
 
       overlay = import ./overlay.nix pname inputs;
@@ -38,10 +36,20 @@
     {
       inherit overlay;
 
-      packages.${system} = self.overlay pkgs nixpkgs.legacyPackages.${system};
+    } // utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs {
+          inherit system; overlays = [ overlay haskellNix.overlay ];
+        };
+      in
+      {
+        packages =
+          self.overlay
+            pkgs
+            nixpkgs.legacyPackages.${system};
 
-      legacyPackages.${system} = pkgs;
+        legacyPackages = pkgs;
 
-      defaultPackage.${system} = self.packages.${system}.${pname};
-    };
+        defaultPackage = self.packages.${system}.${pname};
+      });
 }
