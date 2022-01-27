@@ -1,25 +1,23 @@
-From 61558eac171ada511bbbf7678739bc170705a46f Mon Sep 17 00:00:00 2001
-From: Timothy DeHerrera <tim.deherrera@iohk.io>
-Date: Mon, 6 Dec 2021 15:33:04 -0700
+From 747b0726171496c225a33bd5ae02850071fde707 Mon Sep 17 00:00:00 2001
+From: Timothy DeHerrera <tim.deh@pm.me>
+Date: Wed, 26 Jan 2022 17:34:54 -0700
 Subject: [PATCH] pass in haskell.nix
 
 ---
- default.nix                | 40 ++++----------------------------------
- nix/kore.nix.d/default.nix |  2 ++
- 2 files changed, 6 insertions(+), 36 deletions(-)
+ default.nix | 39 ++++-----------------------------------
+ 1 file changed, 4 insertions(+), 35 deletions(-)
 
 diff --git a/default.nix b/default.nix
-index 90337e710..e80efa803 100644
+index e592898fb..9f7d8aa5f 100644
 --- a/default.nix
 +++ b/default.nix
-@@ -1,50 +1,19 @@
+@@ -1,50 +1,20 @@
  { profiling ? false
 -, release ? false
 +, release ? true
  , threaded ? !profiling
  , checkMaterialization ? false
-+, pkgs
- 
+-
 -# Override `src` when this project is imported as a Git submodule:
 -#
 -# > ttuegel.cleanGitSubtree {
@@ -32,13 +30,14 @@ index 90337e710..e80efa803 100644
 -# layout as the kframework/kore repository (to enable cache re-use).
 -#
 -, src ? null
++, haskell-nix
 +, src
  }:
  
  let
--  sources = import ./nix/sources.nix;
+   sources = import ./nix/sources.nix;
 -  haskell-nix = import sources."haskell.nix" {};
--  inherit (haskell-nix) pkgs;
+   inherit (haskell-nix) pkgs;
    inherit (pkgs) lib;
 -
 -  ttuegel =
@@ -67,7 +66,7 @@ index 90337e710..e80efa803 100644
      materialized = ./nix/kore.nix.d;
      modules = [
        {
-@@ -72,7 +41,6 @@ let
+@@ -72,7 +42,6 @@ let
    shell = import ./shell.nix { inherit default checkMaterialization; };
  
    version = project.kore.components.exes.kore-exec.version;
@@ -75,19 +74,6 @@ index 90337e710..e80efa803 100644
  
    prelude-kore = ./src/main/kore/prelude.kore;
  
-diff --git a/nix/kore.nix.d/default.nix b/nix/kore.nix.d/default.nix
-index 23d0c03c3..27fdf0e06 100644
---- a/nix/kore.nix.d/default.nix
-+++ b/nix/kore.nix.d/default.nix
-@@ -23,5 +23,7 @@
-     ({ lib, ... }:
-       { packages = {}; })
-     { packages = { "$everything" = { ghcOptions = [ "-haddock" ]; }; }; }
-+    ({ lib, ... }:
-+      { planned = lib.mkOverride 900 true; })
-     ];
-   }
-\ No newline at end of file
 -- 
-2.33.1
+2.34.1
 

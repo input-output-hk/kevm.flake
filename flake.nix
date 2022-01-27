@@ -5,14 +5,14 @@
     nixpkgs.follows = "haskellNix/nixpkgs-unstable";
     haskellNix.url = "github:input-output-hk/haskell.nix";
 
-    kevm.url = "github:kframework/evm-semantics/v1.0.1-fc35db2";
+    kevm.url = "github:kframework/evm-semantics/v1.0.1-9beaf5a";
     kevm.flake = false;
 
     k = {
       flake = false;
       submodules = true;
       type = "git";
-      url = "https://github.com/kframework/k?ref=v5.2.43";
+      url = "https://github.com/kframework/k?ref=v5.2.65";
     };
 
     mavenix.url = "github:nix-community/mavenix";

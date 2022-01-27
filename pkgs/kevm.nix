@@ -20,7 +20,7 @@
 }:
 
 let
-  inherit (llvm-backend.passthru) clang lld;
+  inherit (llvm-backend.passthru) clang;
 
   host-PATH = lib.makeBinPath [ k llvm-backend kore ];
 in
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   src = inputs.kevm;
   inherit pname version patches;
 
-  nativeBuildInputs = [ protobuf k llvm-backend clang cmake which openssl pkgconfig procps kore lld ];
+  nativeBuildInputs = [ protobuf k llvm-backend clang cmake which openssl pkgconfig procps kore ];
   buildInputs = [ cryptopp libff mpfr secp256k1 ];
 
   dontConfigure = true;

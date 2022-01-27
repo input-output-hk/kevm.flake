@@ -17,7 +17,7 @@ let
         '';
       });
     in
-    import srcNix { inherit src; pkgs = final; };
+    import srcNix { inherit src; haskell-nix = import inputs.haskellNix { pkgs = prev; }; };
 
 in
 {

@@ -22,7 +22,7 @@
 let
   unwrapped = mavenix.buildMaven {
     inherit src;
-    name = "k-5.2.43";
+    name = "k-5.2.65";
 
     infoFile = ./mavenix.lock;
 

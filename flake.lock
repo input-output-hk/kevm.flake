@@ -187,34 +187,34 @@
     "k": {
       "flake": false,
       "locked": {
-        "lastModified": 1639179600,
-        "narHash": "sha256-uwW2IS82YpY+wdpcYlfa0fvGiufAyhJiApfQhrnfUgw=",
+        "lastModified": 1643229597,
+        "narHash": "sha256-ZmxkVrma7PPsWn7H63GxZ6+BH5TJgHsv1NVo6SRcnuE=",
         "ref": "master",
-        "rev": "e6750bce6745e3f49cb3b9e5bb49c30001ebda08",
-        "revCount": 16588,
+        "rev": "d480a12ceb2bbfd91cb3ee26a07622414797fb97",
+        "revCount": 16615,
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kframework/k?ref=v5.2.43"
+        "url": "https://github.com/kframework/k?ref=v5.2.65"
       },
       "original": {
         "submodules": true,
         "type": "git",
-        "url": "https://github.com/kframework/k?ref=v5.2.43"
+        "url": "https://github.com/kframework/k?ref=v5.2.65"
       }
     },
     "kevm": {
       "flake": false,
       "locked": {
-        "lastModified": 1639188682,
-        "narHash": "sha256-0Th/mzec3MVh+fhRiW5O2czHOet6eeUgPFXjfwA6FEQ=",
+        "lastModified": 1643044281,
+        "narHash": "sha256-cfo3A/DqYFAzcTsDqJ+jtAzCaSe/8Z6HZUfWlDpL8Xw=",
         "owner": "kframework",
         "repo": "evm-semantics",
-        "rev": "fc35db2c4334c2217b0ae9b0b520a58faee8b751",
+        "rev": "9beaf5af25a02e8cd143eb10d846f6ee7a955a4f",
         "type": "github"
       },
       "original": {
         "owner": "kframework",
-        "ref": "v1.0.1-fc35db2",
+        "ref": "v1.0.1-9beaf5a",
         "repo": "evm-semantics",
         "type": "github"
       }
